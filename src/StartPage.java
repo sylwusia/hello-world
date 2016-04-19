@@ -18,7 +18,7 @@ import java.text.AttributedCharacterIterator;
 public class StartPage extends JPanel implements ActionListener{
 
     static Socket socket;
-
+    static String str;
     private static PrintWriter out;
     private static BufferedReader in;
     public static JFrame frame1;
@@ -53,6 +53,7 @@ public class StartPage extends JPanel implements ActionListener{
         main.add(namelabel);
         main.add(userText);
         main.add(button);
+
 
         frame.setContentPane(main);
         frame.pack();
@@ -106,7 +107,7 @@ public class StartPage extends JPanel implements ActionListener{
             {
                 registerInServer();
                 Ships ships = new Ships();
-                 ships.createGui(frame1,socket,in,out);
+                 ships.createGui(frame1,socket,in,out,str);
 
             }
 
@@ -135,7 +136,7 @@ public class StartPage extends JPanel implements ActionListener{
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
-        String str = userText.getText();
+        str = userText.getText();
         out.println("register "+str);
         out.flush();
     }

@@ -30,7 +30,7 @@ public class Ships implements MouseListener {
     static BufferedReader in;
     static  private PrintWriter out;
 
-    public static void createGui(JFrame frame,Socket sta,BufferedReader a, PrintWriter g) {
+    public static void createGui(JFrame frame,Socket sta,BufferedReader a, PrintWriter g,String str) {
 
         socket = sta;
         in  = a;
@@ -46,6 +46,9 @@ public class Ships implements MouseListener {
         JLabel b= new JLabel(" create your own battleship grid  ",SwingConstants.CENTER);
         b.setFont(new Font("Serif", Font.PLAIN, 60));
         inputPanel.add(b);
+        JLabel i= new JLabel("           "+str+"             ",SwingConstants.CENTER);
+        i.setFont(new Font("Serif", Font.PLAIN, 40));
+        inputPanel.add(i);
         JButton button = new JButton("PLAY");
         button.setPreferredSize(new Dimension(150, 100));
         button.setFont(new Font("Serif", Font.PLAIN, 30));
@@ -85,7 +88,7 @@ public class Ships implements MouseListener {
                // } catch (Exception ed) {
                   //  System.out.println(ed.getMessage());}
 
-                game.createAndShowGUI(frame,ships.arrayOfShips,socket,in,out);
+                game.createAndShowGUI(frame,ships.arrayOfShips,socket,in,out,str);
             }
         });
         inputPanel.add(button);

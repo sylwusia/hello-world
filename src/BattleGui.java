@@ -19,7 +19,9 @@ public class BattleGui implements ActionListener
     private static JLabel []labels;
     private static int []arrayOfShip;
     static Socket socket;
-
+    static int turn=1;
+    static int winner=20;
+    private static String userName;
     static BufferedReader in;
     static  private PrintWriter out;
 
@@ -133,7 +135,10 @@ public class BattleGui implements ActionListener
             int row = bnum / GRID_SIZE;
             int col = bnum % GRID_SIZE;
             //System.out.println(e.getSource());
-            out.println("fire "+bnum);
+            if(turn ==1){
+                out.println("fire "+bnum);
+
+                }
 
            // button.setBackground(Color.GREEN);
 
@@ -149,6 +154,7 @@ public class BattleGui implements ActionListener
                 out.println("play test");
                 break;
             case "bum":
+                 turn =1;
                 ImageIcon img;
                 int a = Integer.parseInt(foo[1]);
                 if (arrayOfShip[a] == 1)
@@ -158,12 +164,12 @@ public class BattleGui implements ActionListener
                     out.println("checked 0:" + foo[1]);
                     img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\ping.jpg");
                 }
-
                  labels[a].setIcon(img);
                 System.out.println("bum");
 
                 break;
             case "summary":
+                turn =0;
                 System.out.println("summary");
                 String []hh = foo[1].split(":");
                 int b = Integer.parseInt(hh[0]);
@@ -171,11 +177,13 @@ public class BattleGui implements ActionListener
                 if (b == 1) {
                     System.out.println("jupii");
                     buttonArray[z].setBackground(Color.red);
+                    winner--;
                 }
                 else {
                     System.out.println("ehhhh");
                     buttonArray[z].setBackground(Color.GRAY);
                 }
+                if(winner == 0) System.out.println(userName);
                 break;
             case "jupi":
                 // out.println("fire 10");
@@ -195,7 +203,7 @@ public class BattleGui implements ActionListener
     }
 
 
-    public static void createAndShowGUI(JFrame frame, int[]arrayOfShips, Socket st, BufferedReader h, PrintWriter y)
+    public static void createAndShowGUI(JFrame frame, int[]arrayOfShips, Socket st, BufferedReader h, PrintWriter y,String str)
     {
 
         int maxGap = 20;
@@ -205,6 +213,7 @@ public class BattleGui implements ActionListener
         in = h;
         out = y;
         arrayOfShip = arrayOfShips;
+        userName = str;
         BattleGui battlegui = new BattleGui();
         // frame.setJMenuBar(battlegui.createMenu());
         JPanel gui = new JPanel(new GridLayout(2,3,20,5));
