@@ -19,14 +19,18 @@ public class server {
         }
 
     }
-    public void registerUser(String user,clientThread thread)
+    public synchronized void registerUser(String user,clientThread thread)
     {
+
         p12.put(thread,user);
 
-
+    }
+    public synchronized void removeUser(String user, clientThread thread)
+    {
+        p12.remove(thread);
     }
 
-    public clientThread findEnemyUser(clientThread user)
+    public synchronized clientThread findEnemyUser(clientThread user)
     {
         for (clientThread key : p12.keySet()) {
             if(key!=user)
@@ -43,8 +47,8 @@ public class server {
             while (true) {
                 Socket client = serverSocket.accept();
                 clientThread user = new clientThread(client,this);
-                user.run();
-
+                user.start();
+                //usunięcie wątków
 
             }
         } catch (Exception e) {
