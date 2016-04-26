@@ -20,13 +20,14 @@ public class BattleGui implements ActionListener
     private static int []arrayOfShip;
     static Socket socket;
     static int turn=1;
-    static int winner=20;
+    static int winner;
     private static String userName;
     static BufferedReader in;
     static  private PrintWriter out;
     static JButton     sendMessage;
     static JTextField  messageBox;
     static JTextArea   chatBox;
+    static  JFrame frame;
    /* public JMenuBar createMenu()
     {
         JMenuBar menuBar  = new JMenuBar();;
@@ -119,6 +120,16 @@ public class BattleGui implements ActionListener
             messageBox.requestFocusInWindow();
         }
     }*/
+
+    private  void setWinner()
+    {
+        int sum=0;
+        for(int i=0;i<100;i++)
+        {
+            if(arrayOfShip[i]==1)sum++;
+        }
+        winner=sum;
+    }
     public void actionPerformed(ActionEvent e)
     {
         String classname = getClassName(e.getSource());
@@ -221,7 +232,11 @@ public class BattleGui implements ActionListener
                     System.out.println("ehhhh");
                     buttonArray[z].setBackground(Color.GRAY);
                 }
-                if(winner == 0) System.out.println(userName);
+                if(winner == 0) {
+                    WinnerPage win = new WinnerPage();
+                    win.createGui(frame,userName);
+                }
+
             break;
             case "jupi":
                 // out.println("fire 10");
@@ -246,7 +261,8 @@ public class BattleGui implements ActionListener
     }
 
 
-    public void createAndShowGUI(JFrame frame, int[] arrayOfShips, Socket st, BufferedReader h, PrintWriter y, String str)
+    public void createAndShowGUI(JFrame fr, int[] arrayOfShips,
+                                 Socket st, BufferedReader h, PrintWriter y, String str)
     {
 
         int maxGap = 20;
@@ -255,8 +271,11 @@ public class BattleGui implements ActionListener
         socket = st;
         in = h;
         out = y;
+        frame = fr;
         arrayOfShip = arrayOfShips;
+
         userName = str;
+        setWinner();
         BattleGui battlegui = new BattleGui();
         // frame.setJMenuBar(battlegui.createMenu());
         JPanel gui = new JPanel(new GridLayout(2,3,20,5));
@@ -292,7 +311,7 @@ public class BattleGui implements ActionListener
 
         chatBox = new JTextArea();
         chatBox.setEditable(false);
-        chatBox.setFont(new Font("Serif", Font.PLAIN, 15));
+        chatBox.setFont(new Font("Serif", Font.PLAIN, 12));
         chatBox.setLineWrap(true);
 
         mainPanel.add(new JScrollPane(chatBox), BorderLayout.CENTER);

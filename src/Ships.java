@@ -20,10 +20,11 @@ public class Ships implements MouseListener {
     private JButton[] buttonArray;
     private static int shipsCounter =0;
     private static int []ship={4,3,3,2,2,2,1,1,1,1};
-    public static int []arrayOfShips={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+    public static int []arrayOfShips= new int[100];
+            /*{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};*/
     private static boolean vertical= false;
     static Socket socket;
 
