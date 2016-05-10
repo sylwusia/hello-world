@@ -15,8 +15,8 @@ public class clientThread extends Thread{
     private server cos;
     private clientThread enemy;
 
-   // private PrintWriter enemyout;
-   // private BufferedReader enemyin;
+    // private PrintWriter enemyout;
+    // private BufferedReader enemyin;
 
     @Override
     public void run(){
@@ -26,7 +26,7 @@ public class clientThread extends Thread{
 
                 Parse(inputLine);
 
-             }
+            }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -41,8 +41,16 @@ public class clientThread extends Thread{
         switch (foo[0])
         {
             case "register":
-                cos.registerUser(foo[1],this);
-            break;
+                if(cos.registerUser(foo[1],this)==false)
+                    out.println("nick zajety");
+                else out.println("nick wolny");
+
+                break;
+            case "login":
+                if(cos.loginUser(foo[1],this)==false)
+                    out.println("zalogowano tak");
+                else out.println("zalogowano nie");
+                break;
             case "play":
 
                 enemy = cos.findEnemyUser(this);
@@ -58,7 +66,7 @@ public class clientThread extends Thread{
                     catch (Exception e){
                         System.out.println(e.getMessage());
                     }*/
-                     //out.println(a);
+                    //out.println(a);
                     //enemy.out.println(this.socketOfThread.getRemoteSocketAddress().toString());
                     this.out.println("jupi znalazlem");
                     //enemy.enemyout.println("jupi znalazlem");
@@ -82,10 +90,31 @@ public class clientThread extends Thread{
                 catch(Exception e){
                     System.out.println(e.getMessage());
                 }
-               cos.removeUser(foo[1],this);
+                cos.removeUser(foo[1],this);
                 break;
             case "message":
-                enemy.out.println("message "+foo[1]);
+                String answer="";
+                for(int i=1;i<foo.length;++i)
+                    answer+=(foo[i]+" ");
+
+                enemy.out.println("message "+answer);
+                break;
+            case "winner":
+                cos.addWinn(foo[1]);
+                enemy.out.println("you lost");
+                break;
+            case "loser":
+                cos.addLoser(foo[1]);
+                break;
+            case  "stat":
+                try {
+                    int [] a = cos.statystyki(foo[1]);
+
+                   enemy.out.println("stat "+a[0]+" "+a[1]);
+                }catch(Exception e){
+                    System.out.println(e.getMessage());
+                }
+
                 break;
             default:
                 out.println("użyj instrukcji");

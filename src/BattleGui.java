@@ -28,6 +28,7 @@ public class BattleGui implements ActionListener
     static JTextField  messageBox;
     static JTextArea   chatBox;
     static  JFrame frame;
+    private static String []res ;
    /* public JMenuBar createMenu()
     {
         JMenuBar menuBar  = new JMenuBar();;
@@ -82,8 +83,8 @@ public class BattleGui implements ActionListener
         int numButtons = GRID_SIZE * GRID_SIZE;
         JPanel grid = new JPanel(new GridLayout(GRID_SIZE,GRID_SIZE));
         labels = new JLabel[(10 * 10)];
-        ImageIcon grassIcon = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\blank.jpg");
-        ImageIcon img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\cross.jpg");
+        ImageIcon grassIcon = new ImageIcon("blank.jpg");
+        ImageIcon img = new ImageIcon("cross.jpg");
 
         for (int i = 0; i < numButtons; i++) {
 
@@ -208,10 +209,10 @@ public class BattleGui implements ActionListener
                 int a = Integer.parseInt(foo[1]);
                 if (arrayOfShip[a] == 1)
                 {out.println("checked 1:"+foo[1]);
-                    img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\red.jpg");}
+                    img = new ImageIcon("red.jpg");}
                 else {
                     out.println("checked 0:" + foo[1]);
-                    img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\ping.jpg");
+                    img = new ImageIcon("ping.jpg");
                 }
                  labels[a].setIcon(img);
                 System.out.println("bum");
@@ -233,19 +234,42 @@ public class BattleGui implements ActionListener
                     buttonArray[z].setBackground(Color.GRAY);
                 }
                 if(winner == 0) {
+
+
+                   // out.println("stat "+userName);
                     WinnerPage win = new WinnerPage();
                     win.createGui(frame,userName);
+                    out.println("winner "+userName);
                 }
 
             break;
+            case "you":
+
+
+                LoserPage lose = new LoserPage();
+                lose.createGui(frame,userName);
+                out.println("loser "+userName);
+                break;
             case "jupi":
                 // out.println("fire 10");
                 break;
             case "message":
                 String []jj = foo[1].split(":");
-                chatBox.append("<" + jj[0] + ">:  " + jj[1]
+                String ans=jj[1]+" ";
+                for(int i=2;i<foo.length;++i)
+                    ans+=(foo[i]+" ");
+                //System.out.println(ans);
+                chatBox.append("<" + jj[0] + ">:  " + ans
                         + "\n");
                 break;
+            case "stat":
+                //res =new String[2];
+                 res[0] = foo[1];
+                res[1] = foo[2];
+
+
+                break;
+
         }
 
 

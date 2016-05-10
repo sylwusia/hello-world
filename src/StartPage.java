@@ -15,54 +15,108 @@ import java.text.AttributedCharacterIterator;
 /**
  * Created by Sylwia on 2016-04-04.
  */
-public class StartPage extends JPanel implements ActionListener{
+public class StartPage extends JPanel implements ActionListener {
 
     static Socket socket;
     static String str;
+    static String pass;
     private static PrintWriter out;
     private static BufferedReader in;
     public static JFrame frame1;
     public JTextField userText;
-    public void createGui(JFrame frame)
-    {
+    public JPasswordField userText1;
+    public JLabel message;
+
+    public void createGui(JFrame frame) {
         frame1 = frame;
         JPanel main = new JPanel(new FlowLayout());
 
-        JLabel b= new JLabel("Battleship",SwingConstants.CENTER);
+
+        try {
+            socket = new Socket("localhost", 56565);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        JLabel b = new JLabel("Battleship", SwingConstants.CENTER);
         b.setFont(new Font("Serif", Font.PLAIN, 80));
-        JLabel background1 = new JLabel(new ImageIcon("C:\\Users\\Sylwia\\Desktop\\595.jpg"));
+        JLabel background1 = new JLabel(new ImageIcon("595.jpg"));
 
 
-
-        JLabel  namelabel= new JLabel("User name: ", JLabel.RIGHT);
+        JLabel namelabel = new JLabel("User name: ", JLabel.RIGHT);
         namelabel.setFont(new Font("Serif", Font.PLAIN, 28));
-         userText = new JTextField();
+        userText = new JTextField();
         userText.setFont(new Font("Serif", Font.PLAIN, 24));
-        userText.setPreferredSize(new Dimension(240,40));
+        userText.setPreferredSize(new Dimension(240, 40));
         userText.addActionListener(this);
 
 
-        ImageIcon img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\hyh.jpg");
-        JButton button = new JButton("register");
-        button.setPreferredSize(new Dimension(220, 80));
+        ImageIcon img = new ImageIcon("zaloguj.jpg");
+        JButton button = new JButton("login");
+        button.setPreferredSize(new Dimension(280, 110));
         button.setFont(new Font("Serif", Font.PLAIN, 28));
         button.addActionListener(this);
         button.setIcon(img);
 
+        JLabel  passlabel= new JLabel("Password: ", JLabel.RIGHT);
+        passlabel.setFont(new Font("Serif", Font.PLAIN, 28));
+        userText1 = new JPasswordField();
+        userText1.setEchoChar('*');
+        userText1.setFont(new Font("Serif", Font.PLAIN, 28));
+        userText1.setPreferredSize(new Dimension(240,40));
+        userText1.addActionListener(this);
+
+
+        ImageIcon imgg = new ImageIcon("zarejestruj.jpg");
+        JButton button1 = new JButton("register");
+        button1.setPreferredSize(new Dimension(280, 110));
+        button1.setFont(new Font("Serif", Font.PLAIN, 28));
+        button1.addActionListener(this);
+        button1.setIcon(imgg);
+
+        message = new JLabel(" ");
+        message.setFont(new Font("Serif", Font.PLAIN, 20));
+
         main.add(background1);
         main.add(namelabel);
         main.add(userText);
+         main.add(passlabel);
+         main.add(userText1);
         main.add(button);
+        main.add(button1);
+        main.add(message);
 
+        try {
+
+            Runnable r2 = ()-> {
+
+                try {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        if (parset(inputLine) == true)
+                        {
+                            break;}
+                    }
+
+
+                } catch (Exception ed) {
+                    System.out.println(ed.getMessage());
+                }
+            };
+            new Thread(r2).start();
+
+
+        } catch (Exception ed) {
+            System.out.println(ed.getMessage());}
 
         frame.setContentPane(main);
         frame.pack();
-        frame.setSize(800,600);
+        frame.setSize(800, 800);
         frame.setVisible(true);
     }
-
-
-
 
 
     @Override
@@ -72,72 +126,94 @@ public class StartPage extends JPanel implements ActionListener{
             icon = ImageIO.read(new File("strawberry.jpg"));
             super.paintComponent(g);
             g.drawImage(icon, 0, 0, 1000, 600, null);
-        }catch(Exception e){System.out.println(e.getMessage());}
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
         String classname = getClassName(e.getSource());
-        JComponent component = (JComponent)(e.getSource());
+        JComponent component = (JComponent) (e.getSource());
 
-        if (classname.equals("JMenuItem"))
-        {
-            JMenuItem menusource = (JMenuItem)(e.getSource());
-            String menutext  = menusource.getText();
+        if (classname.equals("JMenuItem")) {
+            JMenuItem menusource = (JMenuItem) (e.getSource());
+            String menutext = menusource.getText();
 
 
-            if (menutext.equals("Load Game"))
-            {
+            if (menutext.equals("Load Game")) {
 
-               // LoadGame();
-            }
-            else if (menutext.equals("Save Game"))
-            {
+                // LoadGame();
+            } else if (menutext.equals("Save Game")) {
 
-               // SaveGame();
+                // SaveGame();
             }
 
-        }
+        } else if (classname.equals("JButton")) {
+            JButton button = (JButton) (e.getSource());
+            String menutext = button.getText();
+            if (menutext.equals("register")) {
+                //registerInServer();
+                register(true);
 
-        else if (classname.equals("JButton"))
-        {
-            JButton button = (JButton)(e.getSource());
-            String menutext  = button.getText();
-            if(menutext.equals("register"))
-            {
-                registerInServer();
-                Ships ships = new Ships();
-                 ships.createGui(frame1,socket,in,out,str);
+
+            } else if (menutext.equals("login")) {
+               // registerInServer();
+                register(false);
 
             }
-
-
 
 
         }
     }
 
 
-
-    protected String getClassName(Object o)
-    {
+    protected String getClassName(Object o) {
         String classString = o.getClass().getName();
         int dotIndex = classString.lastIndexOf(".");
-        return classString.substring(dotIndex+1);
+        return classString.substring(dotIndex + 1);
     }
 
-    public void registerInServer()
-    {
-        try {
-            socket = new Socket("localhost", 56565);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-        }catch(Exception e){
-            System.out.println(e.getMessage());
+    public boolean parset(String msg) {
+        String[] foo = msg.split(" ");
+        switch (foo[0]) {
+            case "nick":
+                if (foo[1].equals("wolny")){
+                    Ships ships = new Ships();
+                    ships.createGui(frame1, socket, in, out, str);
+                    return true;
+                }
+                else return false;
+
+            case "zalogowano":
+                if (foo[1].equals("tak")){
+                    Ships ships = new Ships();
+                    ships.createGui(frame1, socket, in, out, str);
+                    return true;
+                }
+                else return false;
+
         }
+        return false;
+    }
+
+    public void registerInServer() {
+
+    }
+    public boolean register(boolean x){
         str = userText.getText();
-        out.println("register "+str);
+        char []a = userText1.getPassword();
+        pass = String.valueOf(a);
+
+        if (x == true)
+            out.println("register " + str+":"+pass);
+        else out.println("login " + str+":"+pass);
         out.flush();
+
+
+
+        return false;
     }
 }
+

@@ -1,13 +1,13 @@
 
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Sylwia on 2016-04-23.
  */
-public class WinnerPage implements ActionListener{
+public class LoserPage implements ActionListener{
 
     static JFrame frame;
     public void createGui(JFrame fr, String userName)
@@ -15,7 +15,7 @@ public class WinnerPage implements ActionListener{
         frame = fr;
         JPanel mainPanel = new JPanel(new FlowLayout());
 
-        JLabel label = new JLabel("the winner is\n "+userName+"          ",SwingConstants.CENTER);
+        JLabel label = new JLabel("the loser is\n "+userName+"          ",SwingConstants.CENTER);
         label.setFont(new Font("Serif", Font.PLAIN, 60));
         JButton button = new JButton("Play Again");
         button.setPreferredSize(new Dimension(300, 100));

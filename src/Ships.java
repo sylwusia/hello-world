@@ -248,7 +248,7 @@ public class Ships implements MouseListener {
 
         JButton button = (JButton) (e.getSource());
         int bnum = Integer.parseInt(button.getActionCommand());
-        ImageIcon img = new ImageIcon("C:\\Users\\Sylwia\\Desktop\\cross.jpg");
+        ImageIcon img = new ImageIcon("cross.jpg");
         Border pane =  new LineBorder(Color.red,2);
         Border border = buttonArray[bnum].getBorder();
       //LineBorder bbb =
