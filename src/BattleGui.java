@@ -18,8 +18,11 @@ public class BattleGui implements ActionListener
     private static JButton [] buttonArray;
     private static JLabel []labels;
     private static int []arrayOfShip;
+    static int [] array = new  int[100];
     static Socket socket;
     static int turn=1;
+    static int counter = 1;
+    static Timer timer= new Timer(500, new MyTimerActionListener());
     static int winner;
     private static String userName;
     static BufferedReader in;
@@ -182,18 +185,18 @@ public class BattleGui implements ActionListener
             else
             {
                 int bnum = Integer.parseInt(button.getActionCommand());
-            int row = bnum / GRID_SIZE;
-            int col = bnum % GRID_SIZE;
-            //System.out.println(e.getSource());
-            if(turn ==1){
-                out.println("fire "+bnum);
+                int row = bnum / GRID_SIZE;
+                int col = bnum % GRID_SIZE;
+                //System.out.println(e.getSource());
+                if(turn ==1){
+                    out.println("fire "+bnum);
 
                 }
 
-           // button.setBackground(Color.GREEN);
+                // button.setBackground(Color.GREEN);
 
-            fireShot(row, col);
-        }}
+                fireShot(row, col);
+            }}
     }
 
 
@@ -204,17 +207,19 @@ public class BattleGui implements ActionListener
                 out.println("play test");
                 break;
             case "bum":
-                 turn =1;
+                turn =1;
                 ImageIcon img;
                 int a = Integer.parseInt(foo[1]);
                 if (arrayOfShip[a] == 1)
                 {out.println("checked 1:"+foo[1]);
-                    img = new ImageIcon("red.jpg");}
+                    img = new ImageIcon("1.jpg");
+                    array[a]=1;
+                    timer.start();}
                 else {
                     out.println("checked 0:" + foo[1]);
-                    img = new ImageIcon("ping.jpg");
+                    img = new ImageIcon("water1.jpg");
                 }
-                 labels[a].setIcon(img);
+                labels[a].setIcon(img);
                 System.out.println("bum");
 
                 break;
@@ -226,28 +231,34 @@ public class BattleGui implements ActionListener
                 int z = Integer.parseInt(hh[1]);
                 if (b == 1) {
                     System.out.println("jupii");
-                    buttonArray[z].setBackground(Color.red);
+                    ImageIcon imgg  = new ImageIcon("fire.jpg");
+                    buttonArray[z].setIcon(imgg);
+                    //.setBackground(Color.red);
                     winner--;
                 }
                 else {
                     System.out.println("ehhhh");
-                    buttonArray[z].setBackground(Color.GRAY);
+                    ImageIcon im  = new ImageIcon("water.jpg");
+                    buttonArray[z].setIcon(im);
+                    //buttonArray[z].setBackground(Color.GRAY);
                 }
-                if(winner == 0) {
+                if(winner <= 0) {
 
 
-                   // out.println("stat "+userName);
+                    // out.println("stat "+userName);
                     WinnerPage win = new WinnerPage();
                     win.createGui(frame,userName);
+                    timer.stop();
                     out.println("winner "+userName);
                 }
 
-            break;
+                break;
             case "you":
 
 
                 LoserPage lose = new LoserPage();
                 lose.createGui(frame,userName);
+                timer.stop();
                 out.println("loser "+userName);
                 break;
             case "jupi":
@@ -264,7 +275,7 @@ public class BattleGui implements ActionListener
                 break;
             case "stat":
                 //res =new String[2];
-                 res[0] = foo[1];
+                res[0] = foo[1];
                 res[1] = foo[2];
 
 
@@ -285,7 +296,7 @@ public class BattleGui implements ActionListener
     }
 
 
-    public void createAndShowGUI(JFrame fr, int[] arrayOfShips,
+    public void createAndShowGUI(JFrame fr, int[] arrayOfShipss,
                                  Socket st, BufferedReader h, PrintWriter y, String str)
     {
 
@@ -296,7 +307,7 @@ public class BattleGui implements ActionListener
         in = h;
         out = y;
         frame = fr;
-        arrayOfShip = arrayOfShips;
+        arrayOfShip = arrayOfShipss;
 
         userName = str;
         setWinner();
@@ -360,7 +371,7 @@ public class BattleGui implements ActionListener
 
 
         // b.setPreferredSize(new Dimension(ButtonWidth, ButtonHeight));
-        gui.add(battlegui.createContentPane(arrayOfShips));
+        gui.add(battlegui.createContentPane(arrayOfShip));
         gui.add(mainPanel);
         gui.add(battlegui.createContentPaneCPU());
         frame.setContentPane(gui);
@@ -439,5 +450,19 @@ public class BattleGui implements ActionListener
     }
 
 
+    private static class MyTimerActionListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            ImageIcon img;
+            if(counter==4)counter=0;
+            counter++;
+            for(int i=0;i<100;++i)
+            {
+                if(array[i]==1){
+                    img = new ImageIcon(counter+".jpg");
+                    labels[i].setIcon(img);}
 
+            }
+
+        }
+    }
 }

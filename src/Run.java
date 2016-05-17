@@ -9,7 +9,7 @@ public class Run {
 
     public Run()
     {
-        JFrame frame = new JFrame("Battleships");
+        JFrame frame = new JFrame("Battleships: Sylwia Nawój");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         StartPage page = new StartPage();
         page.createGui(frame);

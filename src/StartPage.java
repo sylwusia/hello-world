@@ -5,10 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.text.AttributedCharacterIterator;
 
@@ -26,21 +23,23 @@ public class StartPage extends JPanel implements ActionListener {
     public JTextField userText;
     public JPasswordField userText1;
     public JLabel message;
+    private String ip;
 
     public void createGui(JFrame frame) {
         frame1 = frame;
         JPanel main = new JPanel(new FlowLayout());
 
-
-        try {
-            socket = new Socket("localhost", 56565);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        getIPAddress();
+        if(ip != null) {
+            try {
+                socket = new Socket("localhost", 56565);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream()));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
-
         JLabel b = new JLabel("Battleship", SwingConstants.CENTER);
         b.setFont(new Font("Serif", Font.PLAIN, 80));
         JLabel background1 = new JLabel(new ImageIcon("595.jpg"));
@@ -198,9 +197,46 @@ public class StartPage extends JPanel implements ActionListener {
         return false;
     }
 
-    public void registerInServer() {
+    public void getIPAddress() {
 
-    }
+
+
+            String fileName = "IPAddress.txt";
+
+
+            String line = null;
+
+            try {
+
+                FileReader fileReader =
+                        new FileReader(fileName);
+
+
+                BufferedReader bufferedReader =
+                        new BufferedReader(fileReader);
+
+                while((line = bufferedReader.readLine()) != null) {
+                    System.out.println(line);
+                    ip = line;
+                }
+
+
+                bufferedReader.close();
+            }
+            catch(FileNotFoundException ex) {
+                System.out.println(
+                        "Unable to open file '" +
+                                fileName + "'");
+            }
+            catch(IOException ex) {
+                System.out.println(
+                        "Error reading file '"
+                                + fileName + "'");
+
+                // ex.printStackTrace();
+            }
+        }
+
     public boolean register(boolean x){
         str = userText.getText();
         char []a = userText1.getPassword();

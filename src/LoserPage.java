@@ -21,9 +21,14 @@ public class LoserPage implements ActionListener{
         button.setPreferredSize(new Dimension(300, 100));
         button.setFont(new Font("Serif", Font.PLAIN, 30));
         button.addActionListener(this);
+
+        JLabel ship = new JLabel();
+        ImageIcon img = new ImageIcon("loser.jpg");
+        ship.setIcon(img);
         mainPanel.add(label);
         mainPanel.add(button);
-        mainPanel.setBackground(Color.BLUE);
+        mainPanel.setBackground(new Color(39,119,187));
+        mainPanel.add(ship);
         frame.setContentPane(mainPanel);
         frame.pack();
         frame.setSize(800,600);

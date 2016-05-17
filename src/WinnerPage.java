@@ -23,7 +23,7 @@ public class WinnerPage implements ActionListener{
         button.addActionListener(this);
         mainPanel.add(label);
         mainPanel.add(button);
-        mainPanel.setBackground(Color.BLUE);
+        mainPanel.setBackground(new Color(188,148,239));
         frame.setContentPane(mainPanel);
         frame.pack();
         frame.setSize(800,600);
